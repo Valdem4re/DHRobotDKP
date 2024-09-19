@@ -27,15 +27,11 @@ public:
         m_dhParams{theta, a, d, alpha}
         {   }
 
-    void getInfo() const override {
-        qDebug() << QString("Joint; %1: theta: %2 | a: %3 | d: %4 | alpha: %5")
-            .arg(m_sName)
-            .arg(m_dhParams.theta)
-            .arg(m_dhParams.a)
-            .arg(m_dhParams.d)
-            .arg(m_dhParams.alpha);
-    }
+    void getInfo() const override;
 
+    QString getName() const override;
+
+    DHParams getDHParams() const {return m_dhParams;}
 
 private:
     DHParams m_dhParams;

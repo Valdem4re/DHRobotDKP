@@ -10,18 +10,20 @@ class AbstractRobot
 {
 public:
 
-    AbstractRobot(std::vector<std::unique_ptr<AbstractJoint>> joints) :
-        m_joints(std::move(joints)) {}
-
     virtual ~AbstractRobot() = default;
 
     virtual void getInfo() const = 0;
 
-    void addJoint(std::unique_ptr<AbstractJoint> joint);
+    virtual void addJoint(std::unique_ptr<AbstractJoint> joint) = 0;
 
-    size_t getJointCount() const {return m_joints.size();}
+    virtual AbstractJoint* getJoint(const size_t indx) const = 0;
 
-private:
+    virtual size_t getJointCount() const = 0;
+
+protected:
+
+    AbstractRobot(std::vector<std::unique_ptr<AbstractJoint>> joints) :
+        m_joints(std::move(joints)) {}
 
     std::vector<std::unique_ptr<AbstractJoint>> m_joints;
 

@@ -1,7 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "tablewidget.h"
+
 #include <QMainWindow>
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,9 +23,11 @@ public:
     static MainWindow* getInstance();
 
 private:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
 
     static MainWindow* m_pInstance;
+
+    TableWidget* m_tableWidget;
 
     Ui::MainWindow *ui;
 };

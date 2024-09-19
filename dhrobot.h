@@ -2,7 +2,7 @@
 #define DHROBOT_H
 
 #include "abstractrobot.h"
-#include "abstractjoint.h"
+#include "dhjoint.h".h"
 
 #include <memory>
 #include <vector>
@@ -13,6 +13,12 @@ public:
     DHRobot();
 
     void getInfo() const override;
+
+    void addJoint(std::unique_ptr<AbstractJoint> joint) override;
+
+    DHJoint* getJoint(const size_t indx) const override;
+
+    size_t getJointCount() const override;
 
 };
 

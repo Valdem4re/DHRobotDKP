@@ -12,6 +12,9 @@ public:
 
     virtual void getInfo() const = 0;
 
+    virtual QString getName() const = 0;
+
+
 protected:
     QString m_sName;
 };
