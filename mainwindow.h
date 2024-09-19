@@ -4,7 +4,7 @@
 #include "tablewidget.h"
 
 #include <QMainWindow>
-
+#include <QLabel>
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +32,10 @@ private:
     static MainWindow* m_pInstance;
 
     TableWidget* m_tableWidget;
+
+    QLabel *resultXLabel;
+    QLabel *resultYLabel;
+    QLabel *resultZLabel;
 
     Ui::MainWindow *ui;
 };

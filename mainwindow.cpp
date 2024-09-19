@@ -6,10 +6,11 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QMessageBox>
 #include <memory>
 #include <iostream>
+
+
 MainWindow* MainWindow::m_pInstance = nullptr;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -28,9 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *removeRowButton = new QPushButton("Remove Row", this);
     QPushButton *calculateButton = new QPushButton("Calculate", this);
 
-    QLabel *resultXLabel = new QLabel("X: ", this);
-    QLabel *resultYLabel = new QLabel("Y: ", this);
-    QLabel *resultZLabel = new QLabel("Z: ", this);
+    resultXLabel = new QLabel("X: ", this);
+    resultYLabel = new QLabel("Y: ", this);
+    resultZLabel = new QLabel("Z: ", this);
 
     buttonLayout->addWidget(addRowButton);
     buttonLayout->addWidget(removeRowButton);
@@ -114,12 +115,7 @@ void MainWindow::calculate()
     double x = resultMatrix[0][3];
     double y = resultMatrix[1][3];
     double z = resultMatrix[2][3];
-
-    for(int i = 0; i < 4; ++i) {
-        for(int j = 0; j < 4; ++j) {
-            std::cout << resultMatrix[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
-
+    resultXLabel->setText("X: " + QString::number(x));
+    resultYLabel->setText("Y: " + QString::number(y));
+    resultZLabel->setText("Z: " + QString::number(z));
 }
