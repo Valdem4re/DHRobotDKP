@@ -1,9 +1,8 @@
 #ifndef DHJOINT_H
 #define DHJOINT_H
 
-#include "abstractjoint.h"
-
 #include <QDebug>
+#include <QString>
 
 struct DHParams {
     double theta;
@@ -13,7 +12,7 @@ struct DHParams {
 };
 
 
-class DHJoint : public AbstractJoint
+class DHJoint
 {
 
 public:
@@ -23,17 +22,29 @@ public:
             double a = 0.f,
             double d = 0.f,
             double alpha = 0.f) :
-        AbstractJoint(name),
         m_dhParams{theta, a, d, alpha}
         {   }
 
-    void getInfo() const override;
+    void getInfo() const;
 
-    QString getName() const override;
+    QString getName() const;
 
     DHParams getDHParams() const {return m_dhParams;}
 
+    void setName(QString name) {m_sName = name;}
+
+    void setDHTheta(double theta) {m_dhParams.theta = theta;}
+
+    void setDHa(double a) {m_dhParams.a = a;}
+
+    void setDHd(double d) {m_dhParams.d = d;}
+
+    void setDHAlpha(double alpha) {m_dhParams.alpha = alpha;}
+
+    ~DHJoint() {};
+
 private:
+    QString m_sName;
     DHParams m_dhParams;
 };
 

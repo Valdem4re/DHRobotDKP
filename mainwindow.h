@@ -22,6 +22,10 @@ public:
 
     static MainWindow* getInstance();
 
+public slots:
+
+    void calculate();
+
 private:
     explicit MainWindow(QWidget *parent = nullptr);
 

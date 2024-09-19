@@ -1,31 +1,59 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "dhforwardkinematics.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMessageBox>
+#include <memory>
+#include <iostream>
 MainWindow* MainWindow::m_pInstance = nullptr;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setFixedWidth(502);
-    this->setFixedHeight(400);
+    this->setWindowTitle("KFP for DH-Robot");
+    this->setFixedSize(621, 400);
+
+    QWidget* centralWidget = new QWidget(this);
+    QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
+
+    QVBoxLayout *buttonLayout = new QVBoxLayout();
+
+    QPushButton *addRowButton = new QPushButton("Add Row", this);
+    QPushButton *removeRowButton = new QPushButton("Remove Row", this);
+    QPushButton *calculateButton = new QPushButton("Calculate", this);
+
+    QLabel *resultXLabel = new QLabel("X: ", this);
+    QLabel *resultYLabel = new QLabel("Y: ", this);
+    QLabel *resultZLabel = new QLabel("Z: ", this);
+
+    buttonLayout->addWidget(addRowButton);
+    buttonLayout->addWidget(removeRowButton);
+    buttonLayout->addWidget(calculateButton);
+
+    buttonLayout->addWidget(resultXLabel);
+    buttonLayout->addWidget(resultYLabel);
+    buttonLayout->addWidget(resultZLabel);
+
+    buttonLayout->setSpacing(1);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
+
     m_tableWidget = new TableWidget(6, 5, this);
     m_tableWidget->setDefaultSettings();
 
-    QWidget* centralWidget = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    mainLayout->addLayout(buttonLayout);
+    mainLayout->addWidget(m_tableWidget);
 
-    layout->addWidget(m_tableWidget);
+    setCentralWidget(centralWidget);
 
-    QPushButton *addRowButton = new QPushButton("Add Row", this);
-    layout->addWidget(addRowButton);
-
-    //connect(addRowButton, &QPushButton::clicked, m_tableWidget, &QTableWidget::addRow);
-    setCentralWidget(m_tableWidget);
-
+    connect(addRowButton, &QPushButton::clicked, m_tableWidget, &TableWidget::pushBackRow);
+    connect(removeRowButton, &QPushButton::clicked, m_tableWidget, &TableWidget::popRow);
+    connect(calculateButton, &QPushButton::clicked, this, &MainWindow::calculate);
 }
 
 MainWindow::~MainWindow()
@@ -39,4 +67,59 @@ MainWindow* MainWindow::getInstance()
         m_pInstance = new MainWindow();
     }
     return m_pInstance;
+}
+
+void MainWindow::calculate()
+{
+    size_t rows = m_tableWidget->rowCount();
+    size_t cols = m_tableWidget->columnCount();
+    DHRobot robot;
+    for(int i = 0; i < rows; ++i) {
+        DHJoint joint;
+        for(int j = 0; j < cols; ++j) {
+            QTableWidgetItem* item = m_tableWidget->item(i, j);
+            if(item == nullptr || item->text().isEmpty()) {
+                QMessageBox::warning(this,
+                "Warning", "There should be no empty cells.");
+                break;
+            }
+
+            switch(j) {
+            case 0:
+                joint.setName(item->text());
+                break;
+            case 1:
+                joint.setDHTheta(item->text().toDouble());
+                break;
+            case 2:
+                joint.setDHa(item->text().toDouble());
+                break;
+            case 3:
+                joint.setDHd(item->text().toDouble());
+                break;
+            case 4:
+                joint.setDHAlpha(item->text().toDouble());
+                break;
+            default:
+                QMessageBox::warning(this, "Error", "Something went wrong");
+                break;
+            }
+        }
+        joint.getInfo();
+        robot.addJoint(std::make_shared<DHJoint>(joint));
+    }
+
+    DHForwardKinematics fk(robot);
+    std::vector<std::vector<double>> resultMatrix = fk.computeEndEffectorPose();
+    double x = resultMatrix[0][3];
+    double y = resultMatrix[1][3];
+    double z = resultMatrix[2][3];
+
+    for(int i = 0; i < 4; ++i) {
+        for(int j = 0; j < 4; ++j) {
+            std::cout << resultMatrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
 }

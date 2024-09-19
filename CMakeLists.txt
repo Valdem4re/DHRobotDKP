@@ -16,10 +16,10 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        abstractjoint.h
-        abstractjoint.cpp
-        abstractrobot.h
-        abstractrobot.cpp
+
+
+
+
         dhjoint.h
         dhjoint.cpp
         dhrobot.h

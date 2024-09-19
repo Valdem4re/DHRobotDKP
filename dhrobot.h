@@ -1,25 +1,28 @@
 #ifndef DHROBOT_H
 #define DHROBOT_H
 
-#include "abstractrobot.h"
-#include "dhjoint.h".h"
+#include "dhjoint.h"
 
 #include <memory>
 #include <vector>
 
-class DHRobot : public AbstractRobot
+class DHRobot
 {
 public:
-    DHRobot();
+    DHRobot(std::vector<std::shared_ptr<DHJoint>> joints = {}) : m_joints(joints) {}
 
-    void getInfo() const override;
+    void getInfo() const;
 
-    void addJoint(std::unique_ptr<AbstractJoint> joint) override;
+    void addJoint(std::shared_ptr<DHJoint> joint);
 
-    DHJoint* getJoint(const size_t indx) const override;
+    std::shared_ptr<DHJoint> getJoint(const size_t indx) const;
 
-    size_t getJointCount() const override;
+    size_t getJointCount() const;
 
+    ~DHRobot();
+
+private:
+    std::vector<std::shared_ptr<DHJoint>> m_joints;
 };
 
 #endif // DHROBOT_H

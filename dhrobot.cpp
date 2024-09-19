@@ -12,17 +12,25 @@ void DHRobot::getInfo() const
 
 }
 
-void DHRobot::addJoint(std::unique_ptr<AbstractJoint> joint)
+void DHRobot::addJoint(std::shared_ptr<DHJoint>joint)
 {
-    this->m_joints.push_back(std::move(joint));
+    m_joints.push_back(joint);
 }
 
-DHJoint *DHRobot::getJoint(const size_t indx) const
+std::shared_ptr<DHJoint> DHRobot::getJoint(const size_t indx) const
 {
-    return dynamic_cast<DHJoint*>(m_joints[indx].get());
+    if (indx >= 0 && indx < m_joints.size()) {
+        return m_joints[indx];
+    }
+    return nullptr;
 }
 
 size_t DHRobot::getJointCount() const
 {
     return this->m_joints.size();
+}
+
+DHRobot::~DHRobot()
+{
+
 }

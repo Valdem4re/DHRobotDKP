@@ -44,4 +44,7 @@ void TableWidget::setDefaultSettings()
     this->setItem(3, 4, new QTableWidgetItem(QString("%1").arg(3.1415 / 2.f)));
     this->setItem(4, 4, new QTableWidgetItem(QString("%1").arg(-3.1415 / 2.f)));
     this->setItem(5, 4, new QTableWidgetItem(QString("0")));
+
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
 }
