@@ -1,5 +1,11 @@
 #include "dhforwardkinematics.h"
 
+double round(double& value, int n) {
+    if (value == 0) return 0;
+    double d = std::ceil(std::log10(std::fabs(value)));
+    double power = std::pow(10, n - d);
+    return std::round(value * power) / power;
+}
 
 Matrix DHForwardKinematics::computeEndEffectorPose() const
 {
@@ -18,6 +24,12 @@ Matrix DHForwardKinematics::computeEndEffectorPose() const
 
         Matrix mulRes = matrixMul(endEffectorPose, T);
         endEffectorPose = mulRes;
+    }
+
+    for(int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            endEffectorPose[i][j] = round(endEffectorPose[i][j], 3);
+        }
     }
 
     return endEffectorPose;
@@ -41,7 +53,7 @@ Matrix DHForwardKinematics::getTransformMatrix(const DHParams &params) const
     T[2][2] = cos(params.alpha);
     T[2][3] = params.d;
 
-    T[3][3] = 1;
+    T[3][3] = 1.f;
 
     return T;
 }
