@@ -14,3 +14,11 @@ Joint 5	   |     0	      |       0       |  	d6=0,25     |     	0
 
 
 Для решения задачи был выбран метод [Денавита-Хантерберга](https://en.wikipedia.org/wiki/Forward_kinematics) ввиду простоты его реализации и допустимой для данной задачи точности.
+
+## Build:
+```
+mkdir build
+cd build
+cmake..
+make
+```
